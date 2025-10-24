@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 
 export default function TracePage() {
   const [txHash, setTxHash] = useState('');
-  const [traceResult, setTraceResult] = useState(null);
+  const [traceResult, setTraceResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const handleTrace = async () => {
@@ -49,7 +49,7 @@ export default function TracePage() {
   };
 
   const renderCallTree = (calls: any[], depth = 0) => {
-    return calls.map((call, index) => (
+    return calls.map((call: any, index: number) => (
       <div key={index} className={`ml-${depth * 4} mb-2`}>
         <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
           <div className="flex items-center justify-between mb-2">
@@ -200,7 +200,7 @@ export default function TracePage() {
               </h3>
               
               <div className="space-y-3">
-                {traceResult.logs.map((log, index) => (
+                {traceResult.logs.map((log: any, index: number) => (
                   <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                     <div className="text-sm space-y-2">
                       <div>
@@ -249,7 +249,7 @@ export default function TracePage() {
               { hash: '0x1234...abcd', time: '2 分钟前', status: 'success' },
               { hash: '0x5678...efgh', time: '5 分钟前', status: 'failed' },
               { hash: '0x9abc...ijkl', time: '10 分钟前', status: 'success' },
-            ].map((trace, index) => (
+            ].map((trace: any, index: number) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
