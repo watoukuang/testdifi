@@ -1,27 +1,26 @@
-# syntax=docker/dockerfile:1.4
+# Multi-stage Dockerfile for Next.js (standalone output)
 
 # 1) Build stage
 FROM node:18-bullseye AS builder
 WORKDIR /app
 
-# Copy package files first (利用缓存)
+# Install deps
 COPY package*.json ./
 
-# Configure npm registry and retries
-ARG NPM_REGISTRY=https://registry.npmjs.org
+# Configure npm registry and timeouts (can be overridden at build time)
+ARG NPM_REGISTRY=https://registry.npmmirror.com
 RUN npm config set registry $NPM_REGISTRY \
-    && npm config set fetch-retries 10 \
-    && npm config set fetch-retry-factor 3 \
-    && npm config set fetch-retry-maxtimeout 300000 \
-    && npm config set fetch-timeout 300000 \
+    && npm config set fetch-retries 5 \
+    && npm config set fetch-retry-factor 2 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 120000 \
     && npm -v \
     && node -v
 
-# Install deps with cache mount (BuildKit)
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --prefer-offline || (npm config set registry https://registry.npmjs.org && npm ci --prefer-offline)
+# Install deps with fallback to official registry if mirror is flaky
+RUN npm ci || (npm config set registry https://registry.npmjs.org && npm ci)
 
-# Copy all source files
+# Copy source
 COPY . .
 
 # Build production
