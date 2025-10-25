@@ -8,7 +8,7 @@ docker build -t testdefi-ui:latest .
 ```
 - 启动服务
 ```shell
-docker run --name testdifi-ui --restart=always -p 3002:3000 testdifi-ui:latest
+docker run --name testdifi-ui --restart=always -p 3004:3000 testdefi-ui:latest
 ```
 
 
